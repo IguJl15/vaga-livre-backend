@@ -4,6 +4,11 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.4'
 }
 
+sourceSets {
+	main.java.srcDirs = ["src/backend"]
+	main.resources.srcDirs = ["src/resources"]
+}
+
 group = 'br.com.vagalivre'
 version = '0.0.1-SNAPSHOT'
 
@@ -28,11 +33,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+	//developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 	runtimeOnly 'org.postgresql:postgresql'
+	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	implementation 'com.google.firebase:firebase-admin:9.2.0'
 }
 
 tasks.named('test') {
