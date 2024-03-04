@@ -1,4 +1,4 @@
-package br.backend;
+package br.com.vagalivre;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
