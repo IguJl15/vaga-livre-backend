@@ -57,4 +57,4 @@ out/
 /nbdist/
 /.nb-gradle/
 
-vaga-livre-key.json
+src/resources/*.properties
