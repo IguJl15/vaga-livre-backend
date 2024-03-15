@@ -70,7 +70,7 @@ public class ParkingController {
             @PathVariable Integer parkId,
             @PathVariable Integer parkSpaceId
     ) {
-        parkSpaceService.removeParkSpace(parkSpaceId);
+        parkSpaceService.removeParkSpace(parkSpaceId,parkId);
         return ResponseEntity.noContent().build();
     }
 }
