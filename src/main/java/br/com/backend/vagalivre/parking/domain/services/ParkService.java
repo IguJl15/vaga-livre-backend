@@ -39,11 +39,7 @@ public class ParkService {
 
         BeanUtils.copyProperties(data, park);
 
-        try {
-            return parkRepository.save(park);
-        } catch (DataAccessException e) {
-            throw new RuntimeException("Failed to update park with ID " + parkId + ". Please check your input data.", e);
-        }
+        return parkRepository.save(park);
     }
 
     public Optional<Park> getParkOrNull(Integer parkId) {

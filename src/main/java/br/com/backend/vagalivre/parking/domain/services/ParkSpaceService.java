@@ -29,7 +29,7 @@ public class ParkSpaceService {
 
     public List<ParkSpace> getAllParkSpacesInPark(Integer parkId) {
         Park park = parkService.getParkOrNull(parkId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Park with ID " + parkId + " not found")
+                new ResponseStatusException(HttpStatus.NOT_FOUND ,"Park with ID " + parkId + " not found")
         );
 
         return parkSpaceRepository.findParkSpaceByPark(park);
