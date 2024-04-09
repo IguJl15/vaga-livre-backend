@@ -33,6 +33,13 @@ public class ParkingController {
         return ResponseEntity.ok(parks);
     }
 
+    @GetMapping("")
+    public ResponseEntity<List<Park>> listByTerm(@RequestParam("termConsultation") String term){
+        List<Park> parks = parkService.findParkByTerm(term);
+
+        return ResponseEntity.ok(parks);
+    }
+
     @PostMapping("/create")
     public ResponseEntity<Park> createPark(@Valid @RequestBody ParkDTO data) {
         Park createdPark = parkService.createPark(data);
