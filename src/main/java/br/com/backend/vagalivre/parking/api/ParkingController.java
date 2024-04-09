@@ -20,8 +20,7 @@ public class ParkingController {
 
     public ParkingController(
             ParkSpaceService parkSpaceService,
-            ParkService parkService
-    ) {
+            ParkService parkService) {
         this.parkSpaceService = parkSpaceService;
         this.parkService = parkService;
     }
@@ -33,8 +32,8 @@ public class ParkingController {
         return ResponseEntity.ok(parks);
     }
 
-    @GetMapping("")
-    public ResponseEntity<List<Park>> listByTerm(@RequestParam("termConsultation") String term){
+    @GetMapping("/search")
+    public ResponseEntity<List<Park>> listByTerm(@RequestParam("termConsultation") String term) {
         List<Park> parks = parkService.findParkByTerm(term);
 
         return ResponseEntity.ok(parks);
@@ -55,7 +54,7 @@ public class ParkingController {
     }
 
     @GetMapping("/{parkId}/parkSpaces")
-    public ResponseEntity<List<ParkSpace>> listAllParkSpaces(@PathVariable Integer parkId){
+    public ResponseEntity<List<ParkSpace>> listAllParkSpaces(@PathVariable Integer parkId) {
         List<ParkSpace> parkSpaces = parkSpaceService.getAllParkSpacesInPark(parkId);
 
         return ResponseEntity.ok(parkSpaces);
@@ -66,7 +65,8 @@ public class ParkingController {
     public ResponseEntity<ParkSpace> createNewParkSpace(@PathVariable Integer parkId) {
         ParkSpace newParkSpace = parkSpaceService.createNewParkSpace(parkId);
 
-        if (newParkSpace == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        if (newParkSpace == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(newParkSpace);
     }
@@ -75,9 +75,8 @@ public class ParkingController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteParkSpaceById(
             @PathVariable Integer parkId,
-            @PathVariable Integer parkSpaceId
-    ) {
-        parkSpaceService.removeParkSpace(parkSpaceId,parkId);
+            @PathVariable Integer parkSpaceId) {
+        parkSpaceService.removeParkSpace(parkSpaceId, parkId);
         return ResponseEntity.noContent().build();
     }
 }

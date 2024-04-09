@@ -37,7 +37,7 @@ public class ParkSpaceService {
         Park park = parkService.getParkOrNull(parkId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Park with ID " + parkId + " not found"));
 
-        ParkSpace parkSpace = new ParkSpace(null, null, Collections.emptyList(), park);
+        ParkSpace parkSpace = new ParkSpace(null, Collections.emptyList(), park);
 
         return parkSpaceRepository.save(parkSpace);
     }
