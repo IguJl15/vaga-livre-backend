@@ -21,43 +21,40 @@ public class ParkSpaceService {
     @Autowired
     public ParkSpaceService(
             ParkSpaceRepository parkSpaceRepository,
-            ParkService parkService
-    ){
+            ParkService parkService) {
         this.parkSpaceRepository = parkSpaceRepository;
         this.parkService = parkService;
     }
 
     public List<ParkSpace> getAllParkSpacesInPark(Integer parkId) {
-        Park park = parkService.getParkOrNull(parkId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND ,"Park with ID " + parkId + " not found")
-        );
+        Park park = parkService.getParkOrNull(parkId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Park with ID " + parkId + " not found"));
 
         return parkSpaceRepository.findParkSpaceByPark(park);
     }
 
     public ParkSpace createNewParkSpace(Integer parkId) {
-        Park park = parkService.getParkOrNull(parkId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.BAD_REQUEST, "Park with ID " + parkId + " not found")
-        );
+        Park park = parkService.getParkOrNull(parkId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Park with ID " + parkId + " not found"));
 
         ParkSpace parkSpace = new ParkSpace(null, null, Collections.emptyList(), park);
 
         return parkSpaceRepository.save(parkSpace);
     }
 
-    public void removeParkSpace(Integer parkSpaceId, Integer parkId){
-        Park park = parkService.getParkOrNull(parkId).orElseThrow(()->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Park with Id" + parkId + "not found")
-        );
+    public void removeParkSpace(Integer parkSpaceId, Integer parkId) {
+        @SuppressWarnings("unused")
+        Park park = parkService.getParkOrNull(parkId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Park with Id" + parkId + "not found"));
 
-        ParkSpace parkSpace =  getParkSpaceOrNull(parkSpaceId).orElseThrow(()->
-                new ResponseStatusException(HttpStatus.NOT_FOUND ,"Park Space with ID " + parkSpaceId + " not found")
-        );
+        ParkSpace parkSpace = getParkSpaceOrNull(parkSpaceId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Park Space with ID " + parkSpaceId + " not found"));
 
         parkSpaceRepository.delete(parkSpace);
     }
 
-    public Optional<ParkSpace> getParkSpaceOrNull(Integer parkSpaceId){
+    public Optional<ParkSpace> getParkSpaceOrNull(Integer parkSpaceId) {
         return parkSpaceRepository.findById(parkSpaceId);
     }
 }
