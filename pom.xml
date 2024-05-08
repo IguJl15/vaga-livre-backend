@@ -71,24 +71,43 @@
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.2.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
+        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>pre-build</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                        <configuration>
+                            <excludes>
+                                <exclude>
+                                    <groupId>org.flywaydb</groupId>
+                                    <artifactId>flyway-maven-plugin</artifactId>
+                                </exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
                 <configuration>
+                    <mainClass>br.com.backend.vagalivre.VagaLivreBackendApplication</mainClass>
+
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <image>
+                        <name>docker.io/library/vagalivre-backend:${project.version}</name>
+                    </image>
                 </configuration>
             </plugin>
             <plugin>
@@ -96,6 +115,7 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>9.20.0</version>
                 <configuration>
+                    <cleanDisabled>false</cleanDisabled>
                     <url>jdbc:postgresql://localhost:5432/mydatabase</url>
                     <user>myuser</user>
                     <password>secret</password>

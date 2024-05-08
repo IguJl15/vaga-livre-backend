@@ -1,6 +1,5 @@
 package br.com.backend.vagalivre.parking.domain.entities;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import br.com.backend.vagalivre.reservation.domain.entities.Reservation;
@@ -13,7 +12,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
 @Table
 public class ParkSpace {
@@ -29,7 +27,6 @@ public class ParkSpace {
 
     @ManyToOne
     private Park park;
-
 
     public ParkSpace(Reservation activeReservation, List<Reservation> reservations, Park park) {
         this.activeReservation = activeReservation;

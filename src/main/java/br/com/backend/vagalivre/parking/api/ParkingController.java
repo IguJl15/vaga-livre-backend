@@ -5,6 +5,7 @@ import br.com.backend.vagalivre.parking.domain.entities.Park;
 import br.com.backend.vagalivre.parking.domain.entities.ParkSpace;
 import br.com.backend.vagalivre.parking.domain.services.ParkService;
 import br.com.backend.vagalivre.parking.domain.services.ParkSpaceService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +20,7 @@ public class ParkingController {
 
     public ParkingController(
             ParkSpaceService parkSpaceService,
-            ParkService parkService
-    ) {
+            ParkService parkService) {
         this.parkSpaceService = parkSpaceService;
         this.parkService = parkService;
     }
@@ -28,32 +28,34 @@ public class ParkingController {
     @GetMapping("")
     public ResponseEntity<List<Park>> listAllParks() {
         List<Park> parks = parkService.findAllParks();
+
+        return ResponseEntity.ok(parks);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Park>> listByTerm(@RequestParam("termConsultation") String term) {
+        List<Park> parks = parkService.findParkByTerm(term);
+
         return ResponseEntity.ok(parks);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Park> createPark(@RequestBody ParkDTO data) {
+    public ResponseEntity<Park> createPark(@Valid @RequestBody ParkDTO data) {
         Park createdPark = parkService.createPark(data);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPark);
     }
 
     @PutMapping("/{parkId}/update")
-    public ResponseEntity<Park> updatePark(@PathVariable Integer parkId, @RequestBody ParkDTO parkDTO) {
+    public ResponseEntity<Park> updatePark(@PathVariable Integer parkId, @Valid @RequestBody ParkDTO parkDTO) {
         Park updatedPark = parkService.updatePark(parkId, parkDTO);
+
         return ResponseEntity.ok(updatedPark);
     }
 
-    @DeleteMapping("/{parkId}/delete")
-    public ResponseEntity<Void> deletePark(@PathVariable Integer parkId){
-        parkService.deletePark(parkId);
-
-        return ResponseEntity.noContent().build();
-    }
-
     @GetMapping("/{parkId}/parkSpaces")
-    public ResponseEntity<List<ParkSpace>> listAllParkSpaces(@PathVariable Integer parkId){
-        Park park = parkService.getParkById(parkId);
-        List<ParkSpace> parkSpaces = parkSpaceService.getAllParkSpacesInPark(park);
+    public ResponseEntity<List<ParkSpace>> listAllParkSpaces(@PathVariable Integer parkId) {
+        List<ParkSpace> parkSpaces = parkSpaceService.getAllParkSpacesInPark(parkId);
 
         return ResponseEntity.ok(parkSpaces);
     }
@@ -62,6 +64,10 @@ public class ParkingController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ParkSpace> createNewParkSpace(@PathVariable Integer parkId) {
         ParkSpace newParkSpace = parkSpaceService.createNewParkSpace(parkId);
+
+        if (newParkSpace == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
         return ResponseEntity.status(HttpStatus.CREATED).body(newParkSpace);
     }
 
@@ -69,10 +75,8 @@ public class ParkingController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteParkSpaceById(
             @PathVariable Integer parkId,
-            @PathVariable Integer parkSpaceId
-    ) {
-        parkSpaceService.removeParkSpace(parkSpaceId);
+            @PathVariable Integer parkSpaceId) {
+        parkSpaceService.removeParkSpace(parkSpaceId, parkId);
         return ResponseEntity.noContent().build();
     }
 }
-
